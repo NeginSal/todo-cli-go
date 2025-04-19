@@ -7,9 +7,9 @@ import (
 
 type Task struct {
 	ID          int    `json:"id"`
-	title       string `json:"title"`
-	description string `json:"description"`
-	status      bool   `json:"status"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Done        bool   `json:"stauts"`
 }
 
 func loadTasks() ([]Task, error) {
@@ -31,4 +31,22 @@ func saveTasks(tasks []Task) error {
 		return err
 	}
 	return os.WriteFile("tasks.json", data, 0644)
+}
+
+func addTask(title string, description string) error {
+	tasks, err := loadTasks()
+	if err != nil {
+		return err
+	}
+
+	newTask := Task{
+		Title:       title,
+		Description: description,
+		Done:        false,
+	}
+
+	tasks = append(tasks, newTask)
+	
+	err = saveTasks(tasks)
+	return err
 }
