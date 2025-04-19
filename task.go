@@ -21,6 +21,14 @@ func loadTasks() ([]Task, error) {
 	}
 
 	err = json.Unmarshal(file, &tasks)
-	
+
 	return tasks, err
+}
+
+func saveTasks(tasks []Task) error {
+	data, err := json.MarshalIndent(tasks, "", " ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile("tasks.json", data, 0644)
 }
