@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"golang.org/x/exp/slices"
 	"os"
+	"strconv"
 )
 
 type Task struct {
@@ -72,4 +74,44 @@ func listTasks() error {
 		fmt.Printf("%d. [%s] %s\n", i+1, status, task.Title)
 	}
 	return nil
+}
+
+func markDone(indexStr string) error {
+	index, err := strconv.Atoi(indexStr)
+
+	if err != nil {
+		return fmt.Errorf("the Number is not valid")
+	}
+
+	tasks, err := loadTasks()
+	if err != nil {
+		return err
+	}
+
+	if index < 0 || index >= len(tasks) {
+		return fmt.Errorf("there is no task with this number")
+	}
+	tasks[index].Done = true
+	return saveTasks(tasks)
+}
+
+func deleteTask(indexStr string) error {
+	index, err := strconv.Atoi(indexStr)
+
+	if err != nil {
+		return fmt.Errorf("number is not valid")
+	}
+
+	tasks, err := loadTasks()
+	if err != nil {
+		return err
+	}
+
+	if index < 0 || index >= len(tasks) {
+		return fmt.Errorf("there is no task with this number")
+	}
+
+	// tasks = append(tasks[:index], tasks[index+1:]...)
+	tasks = slices.Delete(tasks, index, index+1)
+	return saveTasks(tasks)
 }
