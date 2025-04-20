@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -46,7 +47,29 @@ func addTask(title string, description string) error {
 	}
 
 	tasks = append(tasks, newTask)
-	
+
 	err = saveTasks(tasks)
 	return err
+}
+
+func listTasks() error {
+	tasks, err := loadTasks()
+
+	if err != nil {
+		return err
+	}
+
+	if len(tasks) == 0 {
+		fmt.Println("There is no task!")
+		return nil
+	}
+
+	for i, task := range tasks {
+		status := "✗"
+		if task.Done {
+			status = "✓"
+		}
+		fmt.Printf("%d. [%s] %s\n", i+1, status, task.Title)
+	}
+	return nil
 }
