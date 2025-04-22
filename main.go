@@ -45,11 +45,16 @@ func main() {
 		case "add":
 			// if not enough arguments provided
 			if len(args) < 3 {
-				fmt.Println("usage: add <title> <description>")
+				fmt.Println("usage: add <title>")
 				continue
 			}
-			title := args[1]
-			description := strings.Join(args[2:], "")
+
+			title := strings.Join(args[1:], " ")
+			fmt.Println("📝 Enter a description for this task:")
+			scanner := bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+			description := scanner.Text()
+
 			err := addTask(title, description)
 			if err != nil {
 				fmt.Println("error adding task:", err)
