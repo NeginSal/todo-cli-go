@@ -82,6 +82,7 @@ func markDone(indexStr string) error {
 	if err != nil {
 		return fmt.Errorf("the Number is not valid")
 	}
+	index = index - 1 
 
 	tasks, err := loadTasks()
 	if err != nil {
@@ -101,6 +102,7 @@ func deleteTask(indexStr string) error {
 	if err != nil {
 		return fmt.Errorf("number is not valid")
 	}
+  index = index - 1 
 
 	tasks, err := loadTasks()
 	if err != nil {
