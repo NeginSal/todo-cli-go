@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/fatih/color"
 	"golang.org/x/exp/slices"
 	"os"
 	"strconv"
@@ -62,14 +63,14 @@ func listTasks() error {
 	}
 
 	if len(tasks) == 0 {
-		fmt.Println("There is no task!")
+		color.Yellow("There are no tasks!")
 		return nil
 	}
 
 	for i, task := range tasks {
-		status := "✗"
+		status := color.RedString("✗")
 		if task.Done {
-			status = "✓"
+			status = color.GreenString("✓")
 		}
 		fmt.Printf("%d. [%s] %s\n", i+1, status, task.Title)
 	}
@@ -82,7 +83,7 @@ func markDone(indexStr string) error {
 	if err != nil {
 		return fmt.Errorf("the Number is not valid")
 	}
-	index = index - 1 
+	index = index - 1
 
 	tasks, err := loadTasks()
 	if err != nil {
@@ -102,7 +103,7 @@ func deleteTask(indexStr string) error {
 	if err != nil {
 		return fmt.Errorf("number is not valid")
 	}
-  index = index - 1 
+	index = index - 1
 
 	tasks, err := loadTasks()
 	if err != nil {

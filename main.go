@@ -1,31 +1,31 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
+	"bufio"	
+	"github.com/fatih/color"
 	"os"
 	"strings"
 )
 
 func main() {
-	fmt.Println("🎯 TODO CLI")
+	color.Cyan("🎯 TODO CLI")
 
 	//load tasks from file
 	tasks, err := loadTasks()
 	if err != nil {
-		fmt.Println("Error loading tasks:", err)
+		color.Red("Error loading tasks:", err)
 		return
 	}
 
 	// if thers is no tasks ,show a message
 	if len(tasks) == 0 {
-		fmt.Println("No tasks availabel")
+		color.Yellow("No tasks availabel")
 	} else {
 		_ = listTasks()
 	}
 
 	// show available commands
-	fmt.Println("\n please enter a command: add | list |done | delete |exit")
+	color.Blue("\n please enter a command: add | list |done | delete |exit")
 
 	//start interactive input mode
 	scanner := bufio.NewScanner(os.Stdin)
@@ -45,21 +45,21 @@ func main() {
 		case "add":
 			// if not enough arguments provided
 			if len(args) < 3 {
-				fmt.Println("usage: add <title>")
+				color.White("usage:  add <title>")
 				continue
 			}
 
 			title := strings.Join(args[1:], " ")
-			fmt.Println("📝 Enter a description for this task:")
+			color.Blue("📝 Enter a description for this task:")
 			scanner := bufio.NewScanner(os.Stdin)
 			scanner.Scan()
 			description := scanner.Text()
 
 			err := addTask(title, description)
 			if err != nil {
-				fmt.Println("error adding task:", err)
+				color.Red("error adding task:", err)
 			} else {
-				fmt.Println("Task added")
+				color.Green("Task added")
 			}
 
 		case "list":
@@ -69,36 +69,37 @@ func main() {
 		case "done":
 			// mark a task as done
 			if len(args) < 2 {
-				fmt.Println("usage: done <task-number>")
+				color.White("usage:  done <task-number>")
 				continue
 			}
 			err := markDone(args[1])
 			if err != nil {
-				fmt.Println(err)
+				color.Red("error", err)
 			} else {
-				fmt.Println("task marked as done")
+				color.Green("task marked as done")
 			}
 
 		case "delete":
 			// Delete a task
 			if len(args) < 2 {
-				fmt.Println("usage:delete <task-number>")
+				color.White("usage:  delete <task-number>")
 				continue
 			}
 			err := deleteTask(args[1])
 			if err != nil {
-				fmt.Println(err)
+				color.Red("error", err)
 			} else {
-				fmt.Println("task deleted")
+				color.Green("task deleted")
 			}
 
 		case "exit":
 			//exit the program
-			fmt.Println("Exiting the program 👋")
+			color.White("Exiting the program 👋")
+			os.Exit(0)
 
 		default:
 			// Invalid command entered
-			fmt.Println("Invalid command! Please use: add | list | done | delete | exit")
+			color.Blue("Invalid command! Please use: add | list | done | delete | exit")
 		}
 
 	}
